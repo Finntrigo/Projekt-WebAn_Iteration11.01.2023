@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+
 DB_Name = "database.db"
 #kreiert Flask Instance
 app = Flask(__name__)
@@ -12,16 +13,9 @@ app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{DB_Name}'
 
 #initiiert die database
 db = SQLAlchemy(app)
-
-
-#database model
-class Users(db.Model):
-    id = db.Column(db.Integer, primary_key=True) #id wird automatisch bei database-eintrag erstellt
-    name = db.Column(db.String(50), nullable=False) #nullable besagt, dass das Feld ausgefüllt werden muss
-    email = db.Column(db.String(120), nullable=False, unique=True) #unique, damit es jede Email nur einmal geben wird
-    date_added = db.Column(db.DateTime, default=datetime.utcnow) #Return the current UTC date and time, with tzinfo None. --> https://docs.python.org/3/library/datetime.html
-
-    def __init__(self, name, email):
+#
+db.init_app(app)
+def __init__(self, name, email):
         self.name = name
         self.email = email
 
