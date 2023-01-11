@@ -2,9 +2,8 @@ from flask import Flask
 from flask import render_template, redirect, url_for, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_login import UserMixin
 
-
-DB_Name = "database.db"
 #kreiert Flask Instance
 app = Flask(__name__)
 app.secret_key = 'key123'
@@ -13,6 +12,7 @@ app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{DB_Name}'
 
 #initiiert die database
 db = SQLAlchemy(app)
+DB_Name = "database.db"
 #
 db.init_app(app)
 def __init__(self, name, email):
@@ -26,6 +26,14 @@ def home():
 @app.route("/tablebooking")
 def tablebooking():
     return render_template("tablebooking.html")
+
+
+
+
+
+
+
+
 
 @app.route("/about")
 def about():
@@ -61,7 +69,7 @@ def signup():
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST": 
-        username = request.form["username"]
+        username = request.form["email"]
         password = request.form["password"]
         session["user"] = username
         #mit der flashmessage zeigen wir dem user, dass er sich eingeloggt hat
