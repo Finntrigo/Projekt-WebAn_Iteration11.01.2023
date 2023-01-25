@@ -65,13 +65,9 @@ def send_email(to, subject, message):
 
 ##########
 
-
-
 @app.route("/about")
 def about():
     return render_template("about.html")
-
-
 
 
 @app.route("/signup", methods=["POST", "GET"])
