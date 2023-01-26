@@ -22,10 +22,7 @@ DB_Name = "database.db"
 
 
 
-db.init_app(app)
-def __init__(self, name, email):
-        self.name = name
-        self.email = email
+
 
 
 @app.route("/")
@@ -56,12 +53,13 @@ def tablebooking():
             restaurant_email = User.query.filter_by(id=restaurant.id).first().email
         #Die Email wird an das Restaurant gesendet
             send_email(restaurant_email, 'New Reservation Request', 'You have a new reservation request.')
-            send_email(session['email'], 'Reservation Request Received', 'Your reservation request has been received and is being processed.') 
+        #Die Email, mit der sich der User gerade in der Session befindet 
+            send_email(session['email'], 'Your Reservation', 'Your reservation request has been received and is being processed. The restaurant ower will contact you and confirm your reservation. thanks TB') 
             flash("Reservation request submitted successfully", category='success')
             return redirect('/')
         restaurants = Restaurant.query.all()
         return render_template('tablebooking.html', restaurants=restaurants)
-    return redirect("/login")
+    
 
 def send_email(to, subject, message):
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -81,34 +79,30 @@ def about():
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
     if request.method == 'POST':
+        name = request.form.get('name')
         email = request.form.get('email')
-        firstName = request.form.get('firstName')
-        password1 = request.form.get('password1')     
-        password2 = request.form.get('password2')
+        password = request.form.get('password')
 
-        if len(email) < 4:
-            #mit der flashmessage zeigen wir dem user, was er/sie beim Signup zu beachten hat, flash wurden kategorisiert, um sie farblich anzupassen
-            flash('Email must be greater than 3 characters.', category='error')
-            pass
-        elif len(firstName) < 2:
-            flash('First name must be greater than 1 characters.', category='error')
-            pass
-        elif password1 != password2:
-            flash('Passwords don\'t match.', category='error')
-            pass
-        elif len(password1) < 7:
-            flash('Password must be at least 7 characters.', category='error')
-            pass
-        else:
-            #user wird kreiert und zur database hinzugefügt
-            #die function "generate_password_hash" encrypted das vom user eingegebene Passwort 
-            #"sha256" ist ein Hasing Algorhythmus, der empfolen wird.
-            new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'))
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Account created.', category='success')
-            return redirect(url_for('home'))
+        #Überprüfung, ob die E-Mail bereits registriert ist
+        user = User.query.filter_by(email=email).first()
+        if user:
+            flash("This email is already registered", category='danger')
+            return redirect("/signup")
+        
+        #Überprüfung, ob das Passwort gültig ist 
+        if len(password) < 8:
+            flash("Password must be at least 8 characters", category='danger')
+            return redirect("/signup")
 
+        #Hash das Passwort
+        password_hash = generate_password_hash(password)
+
+        # Erstellen und Speichern des neuen Benutzers in der Datenbank
+        new_user = User(name=name, email=email, password_hash=password_hash)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Signup successful, please login", category='success')
+        return redirect("/login")
     return render_template("signup.html")
 
 @app.route("/login", methods=["POST", "GET"])

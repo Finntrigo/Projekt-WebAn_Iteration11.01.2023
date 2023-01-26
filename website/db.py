@@ -24,11 +24,9 @@ class User(db.Model, UserMixin):
 
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True) #id wird automatisch bei database-eintrag erstellt
-    reservationname = db.Column(db.String(50), nullable=False) #nullable besagt, dass das Feld ausgefüllt werden muss
-    reservationemail = db.Column(db.String(120), nullable=False, unique=True) #unique, damit es jede Email nur einmal geben wird
-    reservationdate_added = db.Column(db.DateTime, default=datetime.utcnow) #Return the current UTC date and time, with tzinfo None. --> https://docs.python.org/3/library/datetime.html
-    user_id = db.Column(db.Integer, db.ForeignKey('user_id'), nullable=False)
-    table_id = db.Column(db.Integer, db.ForeignKey("table.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    table_id = db.Column(db.Integer, db.ForeignKey('table.id'))
+    reservation_time = db.Column(db.String)
 
 class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
