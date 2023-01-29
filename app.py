@@ -1,11 +1,9 @@
-from website import create_app
-from website import db
+#from website import create_app
 from flask import Flask
 from flask import render_template, redirect, url_for, request, session, flash
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from flask_login import UserMixin
-from website.db import User, Reservation, Restaurant, Table
+#from flask_sqlalchemy import SQLAlchemy
+#from datetime import datetime
+#from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 import smtplib
 
@@ -13,16 +11,16 @@ import smtplib
 app = Flask(__name__)
 app.secret_key = 'key123'
 #fügt eine database hinzu (https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/)
-app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config ['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+#app.config ['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #initiiert die database
-db = SQLAlchemy(app)
-DB_Name = "database.db"
+#db = SQLAlchemy(app)
+#DB_Name = "database.db"
 
+from db import db, User, Reservation, Restaurant, Table
 
-
-db.init_app(app)
+#db.init_app(app)
 def __init__(self, name, email):
         self.name = name
         self.email = email
