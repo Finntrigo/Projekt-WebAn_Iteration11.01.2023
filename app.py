@@ -6,6 +6,9 @@ import smtplib
 #kreiert Flask Instance
 app = Flask(__name__)
 app.secret_key = 'key123'
+#fügt eine database hinzu (https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/)
+#app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+#app.config ['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from db import db, User, Reservation, Restaurant, Table
 

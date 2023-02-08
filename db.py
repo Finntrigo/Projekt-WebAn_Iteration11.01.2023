@@ -13,6 +13,7 @@ app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy()
 db.init_app(app)
 
+
 #database models
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True) #id wird automatisch bei database-eintrag erstellt
